@@ -6,14 +6,14 @@ namespace Schneider.Sweeper.Visualization
 {
     internal class SimpleDisplay : IDisplay
     {
-        private readonly IOutput output;
+        private readonly IRawOutput output;
         private readonly IMap map;
         private readonly IPlayer player;
         private readonly ILifecycle lifecycle;
 
-        public SimpleDisplay(IOutput output, IMap map, IPlayer player, ILifecycle lifecycle)
+        public SimpleDisplay(IMap map, IPlayer player, ILifecycle lifecycle, IRawOutput? output = null)
         {
-            this.output = output;
+            this.output = output ?? new ConsoleOutput();
             this.map = map;
             this.player = player;
             this.lifecycle = lifecycle;
@@ -31,7 +31,6 @@ namespace Schneider.Sweeper.Visualization
                     break;
                 case LifecycleState.Death:
                 case LifecycleState.Success:
-                    DrawInGameScreen();
                     DrawExitInfo();
                     break;
             }
@@ -105,6 +104,7 @@ namespace Schneider.Sweeper.Visualization
 
         private void DrawExitInfo()
         {
+            output.Clear();
             output.WriteLine();
             if (lifecycle.CurrentState == LifecycleState.Death)
             {

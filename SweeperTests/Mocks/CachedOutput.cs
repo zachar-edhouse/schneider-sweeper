@@ -1,6 +1,6 @@
 ﻿namespace Sweeper.Tests.Mocks
 {
-    public class CachedOutput : Schneider.Sweeper.Visualization.IOutput
+    public class CachedOutput : Schneider.Sweeper.Visualization.IRawOutput
     {
         public string Data { get; private set; } = "";
 

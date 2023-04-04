@@ -5,7 +5,8 @@ namespace Schneider.Sweeper.Input
     public interface IInput
     {
         public event EventHandler<Direction>? OnDirectionInput;
-        public event EventHandler<ConsoleKeyInfo>? OnKeyPressed;
+        public event EventHandler? OnKeyPressed;
+        public event EventHandler? OnEscapePressed;
 
         void ReadNext();
     }

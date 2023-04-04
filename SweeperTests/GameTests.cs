@@ -28,7 +28,7 @@ namespace Sweeper.Tests
             gameElementsFactoryMock.Setup(gef => gef.CreateInput(It.IsAny<IRawInput>())).Returns(inputMock.Object);
             gameElementsFactoryMock.Setup(gef => gef.CreateLifecycle()).Returns(lifecycleMock.Object);
             gameElementsFactoryMock.Setup(ger => ger.CreateMap(It.IsAny<FieldValue[,]>(), It.IsAny<uint>(), It.IsAny<uint>())).Returns(mapMock.Object);
-            gameElementsFactoryMock.Setup(gef => gef.CreateDisplay(It.IsAny<IOutput>(), It.IsAny<IMap>(), It.IsAny<IPlayer>(), It.IsAny<ILifecycle>())).Returns(displayMock.Object);
+            gameElementsFactoryMock.Setup(gef => gef.CreateDisplay(It.IsAny<IMap>(), It.IsAny<IPlayer>(), It.IsAny<ILifecycle>(), It.IsAny<IRawOutput>())).Returns(displayMock.Object);
             gameElementsFactoryMock.Setup(gef => gef.CreatePlayer(It.IsAny<IMap>(),It.IsAny<ILifecycle>(), It.IsAny<uint>(), It.IsAny<uint>())).Returns(playerMock.Object);
         }
 
@@ -54,7 +54,7 @@ namespace Sweeper.Tests
         public void WhenEscapeIsReturnedFromInput_ThenGameEnds()
         {
             inputMock.Setup(i => i.ReadNext()).Callback(() => 
-                inputMock.Raise(i => i.OnKeyPressed += null, inputMock.Object, new ConsoleKeyInfo(' ', ConsoleKey.Escape, false, false, false)));
+                inputMock.Raise(i => i.OnEscapePressed += null, inputMock.Object, new EventArgs()));
             var game = new Game(new Schneider.Sweeper.Configuration.Configuration(), gameElementsFactoryMock.Object);
             game.Run();
         }
@@ -64,7 +64,7 @@ namespace Sweeper.Tests
         public void WhenInSuccessOrDeathStateAndAnyKeyIsPressed_ThenGameEnds(LifecycleState state)
         {
             inputMock.Setup(i => i.ReadNext()).Callback(() =>
-                inputMock.Raise(i => i.OnKeyPressed += null, inputMock.Object, new ConsoleKeyInfo('a', ConsoleKey.A, false, false, false)));
+                inputMock.Raise(i => i.OnKeyPressed += null, inputMock.Object, new EventArgs()));
             lifecycleMock.Setup(l => l.CurrentState).Returns(state);
             var game = new Game(new Schneider.Sweeper.Configuration.Configuration(), gameElementsFactoryMock.Object);
             game.Run();

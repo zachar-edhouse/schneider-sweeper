@@ -42,17 +42,15 @@ namespace Sweeper.Tests
                 .Returns(new ConsoleKeyInfo('a', ConsoleKey.A, false, false, false));
 
             var input = new Input(rawInputMock.Object);
-            List<ConsoleKey> keys = new List<ConsoleKey>();
-            input.OnKeyPressed += (sender, key) => keys.Add(key.Key);
+            int counter = 0;
+            input.OnKeyPressed += (sender, arg) => counter++;
 
             for (int i = 0; i < 3; ++i)
             {
                 input.ReadNext();
             }
 
-            List<ConsoleKey> expectedOutput = new List<ConsoleKey>() { ConsoleKey.Escape, ConsoleKey.LeftArrow, ConsoleKey.A };
-
-            Assert.That(keys, Is.EquivalentTo(expectedOutput));
+            Assert.That(counter, Is.EqualTo(3));
         }
     }
 }

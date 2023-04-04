@@ -19,30 +19,22 @@ namespace Schneider.Sweeper.Engine
 
             gameFinished = false;
 
-            FieldValue[,] data;
-            if (config.Map == Configuration.Configuration.MapVariant.Random)
-            {
-                data = MapHelper.CreateRandom(config.RandomMapWidth, config.RandomMapHeight, config.RandomMapMinesCount);
-            }
-            else
-            {
-                data = MapHelper.LoadFromFile(config.FilePath);
-            }
-            uint startPosition = (uint)data.GetLength(0) / 2;
-
-            var map = gameElementsFactory.CreateMap(data, 0, startPosition);
+            var mapData = GetMapData(config);
+            var startPosition = (uint)mapData.GetLength(0) / 2;
+            var map = gameElementsFactory.CreateMap(mapData, 0, startPosition);
 
             lifecycle = gameElementsFactory.CreateLifecycle();
             lifecycle.StateChanged += LifecycleStateChanged;
 
             player = gameElementsFactory.CreatePlayer(map, lifecycle, config.LifeCount, startPosition);
 
-            display = gameElementsFactory.CreateDisplay(new ConsoleOutput(), map, player, lifecycle);
+            display = gameElementsFactory.CreateDisplay(map, player, lifecycle);
             display.Draw();
 
             input = gameElementsFactory.CreateInput();
             input.OnKeyPressed += InputOnKeyPressed;
-            input.OnDirectionInput += ProcessDirectionInput;
+            input.OnDirectionInput += InputOnDirectionInput;
+            input.OnEscapePressed += InputOnEscapePressed;
         }
 
         public void Run()
@@ -53,13 +45,28 @@ namespace Schneider.Sweeper.Engine
             }
         }
 
-        private void InputOnKeyPressed(object? sender, ConsoleKeyInfo e)
+        private FieldValue[,] GetMapData(Configuration.Configuration config)
         {
-            if (e.Key == ConsoleKey.Escape)
+            FieldValue[,] data;
+            if (config.Map == Configuration.Configuration.MapVariant.Random)
             {
-                gameFinished = true;
+                data = MapHelper.CreateRandom(config.RandomMapWidth, config.RandomMapHeight, config.RandomMapMinesCount);
             }
-            else if (lifecycle.CurrentState == LifecycleState.Initializing)
+            else
+            {
+                data = MapHelper.LoadFromFile(config.FilePath);
+            }
+            return data;
+        }
+
+        private void LifecycleStateChanged(object? sender, LifecycleState e)
+        {
+            display.Draw();
+        }
+
+        private void InputOnKeyPressed(object? sender, EventArgs e)
+        {
+            if (lifecycle.CurrentState == LifecycleState.Initializing)
             {
                 lifecycle.StartGame();
                 display.Draw();
@@ -71,12 +78,7 @@ namespace Schneider.Sweeper.Engine
             }
         }
 
-        private void LifecycleStateChanged(object? sender, LifecycleState e)
-        {
-            display.Draw();
-        }
-
-        private void ProcessDirectionInput(object? sender, Direction direction)
+        private void InputOnDirectionInput(object? sender, Direction direction)
         {
             if (lifecycle.CurrentState != LifecycleState.InGame)
             {
@@ -85,6 +87,11 @@ namespace Schneider.Sweeper.Engine
 
             player.Move(direction);
             display.Draw();
+        }
+
+        private void InputOnEscapePressed(object? sender, EventArgs e)
+        {
+            gameFinished = true;
         }
     }
 }

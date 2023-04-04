@@ -1,6 +1,6 @@
 ﻿namespace Schneider.Sweeper.Visualization
 {
-    internal class ConsoleOutput : IOutput
+    internal class ConsoleOutput : IRawOutput
     {
         private ConsoleColor foregroundBackup;
         private ConsoleColor backgroundBackup;

@@ -7,7 +7,8 @@ namespace Schneider.Sweeper.Input
         private IRawInput input;
 
         public event EventHandler<Direction>? OnDirectionInput;
-        public event EventHandler<ConsoleKeyInfo>? OnKeyPressed;
+        public event EventHandler? OnKeyPressed;
+        public event EventHandler? OnEscapePressed;
 
         public Input(IRawInput? input = null)
         {
@@ -17,10 +18,13 @@ namespace Schneider.Sweeper.Input
         public void ReadNext()
         {
             var key = input.ReadKey();
-            OnKeyPressed?.Invoke(this, key);
+            OnKeyPressed?.Invoke(this, new EventArgs());
 
             switch (key.Key)
             {
+                case ConsoleKey.Escape:
+                    OnEscapePressed?.Invoke(this, new EventArgs());
+                    break;
                 case ConsoleKey.UpArrow:
                     OnDirectionInput?.Invoke(this, Direction.Up);
                     break;

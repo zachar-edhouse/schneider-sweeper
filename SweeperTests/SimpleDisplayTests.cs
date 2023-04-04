@@ -15,12 +15,12 @@ namespace Sweeper.Tests
             var lifecycleMock = new Mock<ILifecycle>();
             lifecycleMock.Setup(l => l.CurrentState).Returns(LifecycleState.InGame);
             
-            var display = new SimpleDisplay(output, map, player, lifecycleMock.Object);
+            var display = new SimpleDisplay(map, player, lifecycleMock.Object, output);
             display.Draw();
 
             Assert.That(output.Data, Is.EqualTo(
-@".XX
-..X
+@"1XX
+12X
 
 Player:
     Position: [0, 1]
@@ -38,7 +38,7 @@ Player:
             var lifecycleMock = new Mock<ILifecycle>();
             lifecycleMock.Setup(l => l.CurrentState).Returns(LifecycleState.Death);
 
-            var display = new SimpleDisplay(output, map, player, lifecycleMock.Object);
+            var display = new SimpleDisplay(map, player, lifecycleMock.Object, output);
             display.Draw();
 
             bool gameOverIsPresent = output.Data.Contains("GAME OVER");
@@ -54,7 +54,7 @@ Player:
             var lifecycleMock = new Mock<ILifecycle>();
             lifecycleMock.Setup(l => l.CurrentState).Returns(LifecycleState.Success);
 
-            var display = new SimpleDisplay(output, map, player, lifecycleMock.Object);
+            var display = new SimpleDisplay(map, player, lifecycleMock.Object, output);
             display.Draw();
 
             bool gameFinishedIsPresent = output.Data.Contains("GAME FINISHED");
@@ -66,10 +66,10 @@ Player:
             Moq.Mock<IMap> mapMock = new Moq.Mock<IMap>();
             mapMock.Setup(m => m.Width).Returns(3);
             mapMock.Setup(m => m.Height).Returns(2);
-            mapMock.Setup(m => m[0, 0]).Returns(FieldValue.Empty);
-            mapMock.Setup(m => m[0, 1]).Returns(FieldValue.Empty);
+            mapMock.Setup(m => m[0, 0]).Returns(FieldValue.One);
+            mapMock.Setup(m => m[0, 1]).Returns(FieldValue.One);
             mapMock.Setup(m => m[1, 0]).Returns(FieldValue.Mine);
-            mapMock.Setup(m => m[1, 1]).Returns(FieldValue.Empty);
+            mapMock.Setup(m => m[1, 1]).Returns(FieldValue.Two);
             mapMock.Setup(m => m[2, 0]).Returns(FieldValue.Mine);
             mapMock.Setup(m => m[2, 1]).Returns(FieldValue.Mine);
             return mapMock.Object;

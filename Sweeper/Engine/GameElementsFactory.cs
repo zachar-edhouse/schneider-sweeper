@@ -6,9 +6,9 @@ namespace Schneider.Sweeper.Engine
 {
     internal class GameElementsFactory : IGameElementsFactory
     {
-        public IDisplay CreateDisplay(IOutput output, IMap map, IPlayer player, ILifecycle lifecycle)
+        public IDisplay CreateDisplay(IMap map, IPlayer player, ILifecycle lifecycle, IRawOutput? rawOutput = null)
         {
-            return new SimpleDisplay(output, map, player, lifecycle);
+            return new SimpleDisplay(map, player, lifecycle, rawOutput);
         }
 
         public IInput CreateInput(IRawInput? input = null)
