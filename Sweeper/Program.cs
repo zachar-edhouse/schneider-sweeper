@@ -12,10 +12,11 @@ namespace Schneider.Sweeper
         {
             try
             {
-                var configuration = ConfigurationParser.Parse(args);
+                var parser = new ConfigurationParser();
+                var configuration = parser.Parse(args);
                 if (configuration.ShowHelp)
                 {
-                    ConfigurationParser.PrintHelp();
+                    parser.PrintHelp();
                     return;
                 }
                 Game game = new Game(configuration);

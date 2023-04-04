@@ -4,10 +4,18 @@ namespace Sweeper.Tests
 {
     internal class ConfigurationParserTests
     {
+        private ConfigurationParser parser;
+
+        [SetUp]
+        public void Setup()
+        {
+            parser = new ConfigurationParser();
+        }
+
         [Test]
         public void WhenArgumentsArePassed_ThenProperConfigurationIsCreated()
         {
-            var configuration = ConfigurationParser.Parse(new string[] { "-v", "random", "-m", "1", "-w", "5", "-g", "3" });
+            var configuration = parser.Parse(new string[] { "-v", "random", "-m", "1", "-w", "5", "-g", "3" });
             Assert.IsNotNull(configuration);
             Assert.That(configuration.Map, Is.EqualTo(Configuration.MapVariant.Random));
             Assert.That(configuration.RandomMapMinesCount, Is.EqualTo(1));
@@ -18,7 +26,7 @@ namespace Sweeper.Tests
         [Test]
         public void WhenArgumentsArePassed_ThenProperConfigurationIsCreated2()
         {
-            var configuration = ConfigurationParser.Parse(new string[] { "-v", "file", "-f", "filepath.txt", "-l", "42"});
+            var configuration = parser.Parse(new string[] { "-v", "file", "-f", "filepath.txt", "-l", "42"});
             Assert.IsNotNull(configuration);
             Assert.That(configuration.Map, Is.EqualTo(Configuration.MapVariant.File));
             Assert.That(configuration.FilePath, Is.EqualTo("filepath.txt"));
@@ -28,13 +36,13 @@ namespace Sweeper.Tests
         [Test]
         public void WhenInvalidArtumentsArePassed_ThenExceptionIsThrown()
         {
-            Assert.Throws<FormatException>(() => ConfigurationParser.Parse(new string[] { "-l", "invalid" }));
+            Assert.Throws<FormatException>(() => parser.Parse(new string[] { "-l", "invalid" }));
         }
 
         [Test]
         public void WhenNoArgumentsArePassed_ThenDefaultConfigurationIsCreated()
         {
-            var configuration = ConfigurationParser.Parse(new string[] { });
+            var configuration = parser.Parse(new string[] { });
             Assert.IsNotNull(configuration);
         }
     }

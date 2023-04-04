@@ -23,7 +23,7 @@ namespace Schneider.Sweeper.Engine
             }
             if (lifeCount == 0)
             {
-                throw new ArgumentException("The number of lifes has to be non-zero.");
+                throw new ArgumentException("The number of lives has to be non-zero.");
             }
 
             this.map = map;
