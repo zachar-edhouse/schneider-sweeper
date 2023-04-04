@@ -1,3 +1,6 @@
 Sweeper/.vs/
 Sweeper/obj/
 SweeperTests/obj/
+.vs/
+Sweeper/bin/
+SweeperTests/bin/
