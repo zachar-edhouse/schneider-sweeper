@@ -70,14 +70,10 @@ namespace Schneider.Sweeper.Engine
 
             MoveCount++;
             var value = map.Visit(X, Y);
-            CheckCollision(value);
-            if (X == endX)
-            {
-                lifecycle.Succeed();
-            }
+            UpdateStatus(value);
         }
 
-        private void CheckCollision(FieldValue value)
+        private void UpdateStatus(FieldValue value)
         {
             if (value == FieldValue.Mine)
             {
@@ -85,7 +81,13 @@ namespace Schneider.Sweeper.Engine
                 if (LifeCount == 0)
                 {
                     lifecycle.Die();
+                    return;
                 }
+            }
+
+            if (X == endX)
+            {
+                lifecycle.Succeed();
             }
         }
     }
