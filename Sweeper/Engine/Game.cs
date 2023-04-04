@@ -29,10 +29,12 @@ namespace Schneider.Sweeper.Engine
                 data = MapHelper.LoadFromFile(config.FilePath);
             }
             uint startPosition = (uint)data.GetLength(0) / 2;
+
             var map = gameElementsFactory.CreateMap(data, 0, startPosition);
 
             lifecycle = gameElementsFactory.CreateLifecycle();
             lifecycle.StateChanged += LifecycleStateChanged;
+
             player = gameElementsFactory.CreatePlayer(map, lifecycle, config.LifeCount, startPosition);
 
             display = gameElementsFactory.CreateDisplay(new ConsoleOutput(), map, player, lifecycle);

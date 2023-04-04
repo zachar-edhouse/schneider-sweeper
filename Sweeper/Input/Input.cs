@@ -4,10 +4,10 @@ namespace Schneider.Sweeper.Input
 {
     internal class Input : IInput
     {
+        private IRawInput input;
+
         public event EventHandler<Direction>? OnDirectionInput;
         public event EventHandler<ConsoleKeyInfo>? OnKeyPressed;
-
-        private IRawInput input;
 
         public Input(IRawInput? input = null)
         {

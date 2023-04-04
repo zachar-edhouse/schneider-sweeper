@@ -5,8 +5,8 @@ namespace Schneider.Sweeper.Engine
     internal class Player : IPlayer
     {
         private readonly IMap map;
-        private uint endX;
         private readonly ILifecycle lifecycle;
+        private readonly uint endX;
 
         public uint X { get; private set; }
         public uint Y { get; private set; }
